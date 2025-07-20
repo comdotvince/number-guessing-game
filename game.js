@@ -48,7 +48,6 @@ function startGame(newTargetNumber, newRound) {
     targetNumber = newTargetNumber;
   }
   console.clear();
-  console.log(targetNumber);
   console.log(`Welcome to the Number Guessing Game!
 I'm thinking of a number between 1 and 100.
 You have 5 chances to guess the correct number`);
