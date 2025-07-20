@@ -1,5 +1,6 @@
 import "readline";
 import { createInterface } from "readline";
+import { start } from "repl";
 
 const rl = createInterface({
   input: process.stdin,
@@ -14,7 +15,8 @@ function stopWatch(startTime) {
   const elapsed = Math.floor((Date.now() - startTime) / 1000);
   const minutes = Math.floor(elapsed / 60);
   const seconds = elapsed % 60;
-  const timer = `${minutes} minutes and ${seconds} seconds.`;
+  const timer = `${minutes} minutes and ${seconds} seconds`;
+
   return timer;
 }
 
@@ -47,12 +49,14 @@ You have 5 chances to guess the correct number`);
       console.log("");
       console.log(`Great! You have selected the Medium difficulty level.
 Let's start the game!.`);
-
-      guessNumber(5, targetNumber);
+      const startTime = Date.now();
+      guessNumber(5, targetNumber, startTime);
       return;
     } else if (choice === "3") {
       console.log("You selected Hard mode with 3 chances.");
-      guessNumber(3, targetNumber);
+      const startTime = Date.now();
+      console.log(typeof startTime);
+      guessNumber(3, targetNumber, startTime);
       return;
     } else {
       console.log("Invalid choice. Please select a valid difficulty level.");
@@ -86,6 +90,7 @@ function guessNumber(chances, targetNumber, startTime) {
 
   rl.question(
     `You have ${chances} chances left. \nGuess the number: `,
+
     (input) => {
       const guess = parseInt(input, 10);
       if (isNaN(guess) || guess < 1 || guess > 100) {
@@ -97,16 +102,18 @@ function guessNumber(chances, targetNumber, startTime) {
       attempts++;
       if (guess === targetNumber) {
         const timer = stopWatch(startTime);
+
+        console.log(timer);
         console.log(
-          `Congratulations! You've guessed the number ${targetNumber} in ${attempts} attempts in ${timer}`
+          `Congratulations! You've guessed the number ${targetNumber} in ${attempts} attempts in ${timer}.`
         );
         rl.close();
       } else if (guess < targetNumber) {
         console.log("Too low!");
-        guessNumber(chances - 1, targetNumber);
+        guessNumber(chances - 1, targetNumber, startTime);
       } else {
         console.log("Too high!");
-        guessNumber(chances - 1, targetNumber);
+        guessNumber(chances - 1, targetNumber, startTime);
       }
     }
   );
