@@ -6,12 +6,25 @@ const rl = createInterface({
   output: process.stdout,
 });
 
-const targetNumber = Math.floor(Math.random() * 100) + 1;
+let targetNumber = Math.floor(Math.random() * 100) + 1;
 let attempts = 0;
 let round = 1;
 
-function startGame() {
+function stopWatch(startTime) {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = elapsed % 60;
+  const timer = `${minutes} minutes and ${seconds} seconds.`;
+  return timer;
+}
+
+function startGame(newTargetNumber) {
+  if (newTargetNumber) {
+    targetNumber = newTargetNumber;
+  }
   console.clear();
+
+  console.log(targetNumber);
   console.log(`Welcome to the Number Guessing Game!
 I'm thinking of a number between 1 and 100.
 You have 5 chances to guess the correct number`);
@@ -27,7 +40,8 @@ You have 5 chances to guess the correct number`);
   rl.question("Enter your choice: ", (choice) => {
     if (choice === "1") {
       console.log("You selected Easy mode with 10 chances.");
-      guessNumber(10, targetNumber);
+      const startTime = Date.now();
+      guessNumber(10, targetNumber, startTime);
       return;
     } else if (choice === "2") {
       console.log("");
@@ -48,7 +62,7 @@ Let's start the game!.`);
   });
 }
 
-function guessNumber(chances, targetNumber) {
+function guessNumber(chances, targetNumber, startTime) {
   if (chances <= 0) {
     console.log(
       `Sorry, you've run out of chances. The number was ${targetNumber}.`
@@ -57,8 +71,10 @@ function guessNumber(chances, targetNumber) {
       if (answer.toLowerCase() === "yes") {
         attempts = 0;
         round++;
+        const newTargetNumber = Math.floor(Math.random() * 100) + 1;
+        console.clear();
         console.log("");
-        startGame();
+        startGame(newTargetNumber);
       } else {
         console.log("Thanks for playing! Goodbye!");
         rl.close();
@@ -69,7 +85,7 @@ function guessNumber(chances, targetNumber) {
   }
 
   rl.question(
-    `You have ${chances} chances left. Guess the number: `,
+    `You have ${chances} chances left. \nGuess the number: `,
     (input) => {
       const guess = parseInt(input, 10);
       if (isNaN(guess) || guess < 1 || guess > 100) {
@@ -80,8 +96,9 @@ function guessNumber(chances, targetNumber) {
 
       attempts++;
       if (guess === targetNumber) {
+        const timer = stopWatch(startTime);
         console.log(
-          `Congratulations! You've guessed the number ${targetNumber} in ${attempts} attempts.`
+          `Congratulations! You've guessed the number ${targetNumber} in ${attempts} attempts in ${timer}`
         );
         rl.close();
       } else if (guess < targetNumber) {
