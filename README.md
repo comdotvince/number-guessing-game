@@ -2,7 +2,7 @@
 
 A console-based number guessing game built with Node.js where players try to guess a randomly generated number between 1 and 100.
 
-Project Solution from [roadmap.sh](https://roadmap.sh/projects/number-guessing-game)
+Project Solution to [roadmap.sh](https://roadmap.sh/projects/number-guessing-game)
 
 ## Features
 
