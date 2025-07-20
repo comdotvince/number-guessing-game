@@ -26,7 +26,6 @@ function startGame(newTargetNumber) {
   }
   console.clear();
 
-  console.log(targetNumber);
   console.log(`Welcome to the Number Guessing Game!
 I'm thinking of a number between 1 and 100.
 You have 5 chances to guess the correct number`);
@@ -88,6 +87,12 @@ function guessNumber(chances, targetNumber, startTime) {
     return;
   }
 
+  if (attempts === 6) {
+    targetNumber % 2 === 0
+      ? console.log("Hint: The number is even.")
+      : console.log("Hint: The number is odd.");
+  }
+
   rl.question(
     `You have ${chances} chances left. \nGuess the number: `,
 
@@ -103,7 +108,6 @@ function guessNumber(chances, targetNumber, startTime) {
       if (guess === targetNumber) {
         const timer = stopWatch(startTime);
 
-        console.log(timer);
         console.log(
           `Congratulations! You've guessed the number ${targetNumber} in ${attempts} attempts in ${timer}.`
         );
